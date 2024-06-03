@@ -27,7 +27,7 @@ class Kreis{
 class Movable extends Kreis {
     handleFood(x, y) {
     if (calculateDist(this.x, this.y, x, y) < this.radius) {
-      this.radius = this.radius + 1
+      this.radius = this.radius + 5
       return true 
     } else {
       return false
@@ -53,17 +53,22 @@ class Player extends Movable {
   }
 
 }
-
 class Nahrung extends Kreis {
   relocateNahrung(playerX, playerY, botX, botY) {
+    let rlocateAtmpt = 0
     this.x = randomNumber(0, 400)
     this.y = randomNumber(0, 400)
     while(true) {
-      if(calculateDist(playerX, playerY, this.x, this.y) < player.radius) {
+      if(calculateDist(playerX, playerY, this.x, this.y) < player.radius && rlocateAtmpt <= 10) {
         this.x = randomNumber(0, 400)
         this.y = randomNumber(0, 400)
+        rlocateAtmpt = rlocateAtmpt + 1
       } else {
-        break
+        if(rlocateAtmpt >= 10) {
+          return false
+        } else {
+          return true
+        }
       }
     }
     
@@ -137,12 +142,16 @@ function draw() {
   }
   
   
-  bot.nextStep(player, nahrungen)
+  //bot.nextStep(player, nahrungen)
 
   for (const nahrung of nahrungen) {
     nahrung.show()
     if (player.handleFood(nahrung.x, nahrung.y) || bot.handleFood(nahrung.x, nahrung.y)) {
-      nahrung.relocateNahrung(player.x, player.y, bot.x, bot.y, player.radius)
+      if(nahrung.relocateNahrung(player.x, player.y, bot.x, bot.y, player.radius)) {
+        //lol
+      } else {
+        nahrungen = nahrungen.slice(nahrungen.indexOf(nahrung), 1)
+      }
     }
   }
 
