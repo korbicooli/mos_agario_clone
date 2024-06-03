@@ -1,3 +1,6 @@
+/** 
+generates a random number between min and max.
+*/
 function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -134,7 +137,7 @@ function draw() {
   }
   
   
-  //bot.nextStep(player, nahrungen)
+  bot.nextStep(player, nahrungen)
 
   for (const nahrung of nahrungen) {
     nahrung.show()
